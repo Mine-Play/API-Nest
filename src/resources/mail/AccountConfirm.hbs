@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <title></title>
+    <style>
+      body{
+        background-image: url('http://s3.mine-play.ru/mail/account-confirm/background.png');
+        margin:0;
+        height: 435px;
+        background-size: cover;
+        background-position: center;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      .main__box{
+        background-color: #181818;
+        border-radius: 22px;
+        padding: 15px 16px;
+        overflow: hidden;
+        width: 567px;
+        height: 292px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      }
+      .header{
+        display:flex;
+        justify-content: space-between;
+      }
+      .code__block{
+        display:flex;
+        gap:10px;
+      }
+      .code__item{
+        background-color: #212121;
+        border-radius: 14px;
+        padding: 5px 14px;
+        font-size: 31px;
+        color: white;
+        font-family: 'Google Sans';
+        font-weight: 600;
+        margin-right:10px;
+      }
+      .king__image{
+        position:absolute;
+        bottom:0;
+        right:0;
+        mix-blend-mode: luminosity;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main__box">
+      <div class="header">
+        <img src="http://s3.mine-play.ru/mail/account-confirm/logo.png" alt="Mine-Play.Ru Logo">
+        <img src="http://s3.mine-play.ru/mail/account-confirm/heading.png" alt="Подтверждение аккаунта" style="width:265px;height:23px;">
+      </div>
+      <div class="body">
+        <div class="code">
+          <div class="code__block">
+            <div class="code__item">
+                {{ code.[0] }}
+            </div>
+            <div class="code__item">
+                {{ code.[1] }}
+            </div>
+            <div class="code__item">
+                {{ code.[2] }}
+            </div>
+            <div class="code__item">
+                {{ code.[3] }}
+            </div>
+            <div class="code__item">
+                {{ code.[4] }}
+            </div>
+          </div>
+          <img src="http://s3.mine-play.ru/mail/account-confirm/lifetime.png" alt="">
+        </div>
+        <img src="http://s3.mine-play.ru/mail/account-confirm/text.png" alt="">
+      </div>
+      <img src="http://s3.mine-play.ru/mail/account-confirm/copyright.png" alt="">
+      <img src="http://s3.mine-play.ru/mail/account-confirm/king.png" class="king__image">
+    </div>
+  </body>
+</html>
