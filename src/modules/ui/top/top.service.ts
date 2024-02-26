@@ -30,8 +30,13 @@ export class TopService {
         top.render = storage[1];
         return top;
     }
-    findActive(): Promise<TopBlock> {
-        return this.topRepository.findOne({ where: { isActive: true } });
+    async findActive(): Promise<TopBlock> {
+        const active = await this.topRepository.findOne({ where: { isActive: true } });
+        return {
+            ...active,
+            render: this.storageService.get(`/ui/top/renders/${active.id}.png`),
+            background: this.storageService.get(`/ui/top/backgrounds/${active.id}.png`)
+        }
     }
     findAll(): Promise<TopBlock[]> {
         return this.topRepository.find();

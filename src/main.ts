@@ -15,6 +15,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new ThrottleErrorFilter(), new MyThrottleErrorFilter());
   app.use(helmet());
+  app.enableCors();
   console.info('Server started on port ' + port + ' 🔥');
   console.info('HTTP Address: http://127.0.0.1:' + port + '/');
   await app.listen(port);
