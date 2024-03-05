@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
 import { VerifyService } from '../verify/verify.service';
 import { UsersService } from '../users/users.service';
@@ -24,7 +24,10 @@ export class AuthConfirmController {
         const user = await this.usersService.getById(request.user.id);
         const verify = await this.verifyService.verify("email", user, body);
         if(verify){
-            return this.usersService.emailConfirm(user);
+            this.usersService.emailConfirm(user);
+            return {
+                "status": HttpStatus.OK
+            }
         }
     }
 }

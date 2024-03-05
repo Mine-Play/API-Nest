@@ -1,4 +1,6 @@
 export interface Texture {
-    url:  string | boolean;
+    assetType: number;
+    color?: string;
+    url?:  string | boolean;
     type?: string | boolean;
 }

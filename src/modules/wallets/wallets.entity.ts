@@ -16,6 +16,8 @@ export class Wallet {
     @Column({ type: "integer", default: 0 })
     gamecoins: number;
 
+    coins: number;
+
     @Column({ type: "integer", default: 0 })
     keys: number;
 

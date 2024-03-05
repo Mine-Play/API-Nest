@@ -19,10 +19,12 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { VerifyModule } from './modules/verify/verify.module';
 import { EmailProcessor } from './processors/Email.processor';
+import { GeoDetectProcessor } from './processors/GeoDetect.processor';
 import { ServersModule } from './modules/servers/servers.module';
 import { ItemsModule } from './modules/items/items.module';
 import { ShopModule } from './modules/shop/shop.module';
 import { NewsModule } from './modules/news/news.module';
+import { SessionsModule } from './modules/sessions/sessions.module';
 
 const TypeORMConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -98,7 +100,8 @@ const TypeORMConfig: TypeOrmModuleOptions = {
     ServersModule,
     ItemsModule,
     ShopModule,
-    NewsModule
+    NewsModule,
+    SessionsModule
   ],
   controllers: [],
   providers: [
@@ -106,7 +109,8 @@ const TypeORMConfig: TypeOrmModuleOptions = {
       provide: APP_GUARD,
       useClass: ThrottlerGuard
     },
-    EmailProcessor
+    EmailProcessor,
+    GeoDetectProcessor
   ]
 })
 export class AppModule {}

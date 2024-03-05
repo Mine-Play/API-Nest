@@ -47,10 +47,13 @@ export class UsersService {
     }
 
     async getMe(id: string): Promise<User | undefined> {
-        const user = await this.userRepository.findOne({ where: { id: id } });
-        user.wallet = await this.walletService.getByUser(user);
+        const user = await this.userRepository.findOne({ where: { id: id }, select: ['id', 'name', 'level', 'exp', 'avatar', 'skin', 'cloak', 'lastLogin', 'createdAt', 'role', 'banner', 'params'] });
+        // user.role = await this.rolesService.findById(user.role);
+        user.wallet = await this.walletService.getByUser(user, true);
         user.skin = await this.texturesService.getSkin(user);
         user.cloak = await this.texturesService.getCloak(user);
+        user.banner = await this.texturesService.getBanner(user);
+        delete user.params;
         return user;
     }
 }

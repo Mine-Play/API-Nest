@@ -10,6 +10,9 @@ import * as useragent from 'useragent';
 import { VerifyService } from '../verify/verify.service';
 import { WalletsService } from '../wallets/wallets.service';
 import { User } from '../users/users.entity';
+import { EmailHelper } from 'src/helpers/email.helper';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +21,8 @@ export class AuthService {
     private sessionsService: SessionsService,
     private jwtService: JwtService,
     private confirmationsService: VerifyService,
-    private walletsService: WalletsService
+    private walletsService: WalletsService,
+    @InjectQueue('geoDetect') private geoDetectQueue: Queue
   ) {}
   async login(login, password) {
     const user = await this.usersService.getByLogin(login);
@@ -77,7 +81,6 @@ export class AuthService {
     } else {
       device = `${agent.device.toString()}, ${agent.os.toString()}`;
     }
-    const ipInfoWrapper = new IPinfoWrapper(process.env.IPINFO_TOKEN);
 
     let ip;
     if(request.ip == "::1"){
@@ -85,7 +88,6 @@ export class AuthService {
     }else{
       ip = request.ip;
     }
-    const ipInfo = await ipInfoWrapper.lookupIp(ip);
     const activeSessions = await this.sessionsService.getByUser(user);
     let session;
     for(let i = 0; i < activeSessions.length; i++){
@@ -102,9 +104,10 @@ export class AuthService {
         browser: agent.family,
         place: 'Site',
         user: user,
-        country: ipInfo.country,
-        city: ipInfo.city,
+        country: 0,
+        city: 0,
       });
+      this.geoDetectQueue.add("getLocation", { session, ip });
     }
     const payload = { id: user.id, session: session.id };
     return {
@@ -112,7 +115,8 @@ export class AuthService {
       tokenType: 'Bearer',
       token: await this.jwtService.signAsync(payload),
       session: session.id,
-      isEmailConfirmed: user.isEmailConfirmed
+      isEmailConfirmed: user.isEmailConfirmed,
+      obusficatedEmail: EmailHelper.obusficate(user.email)
     };
   }
 }

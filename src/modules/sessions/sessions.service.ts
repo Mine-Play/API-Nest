@@ -13,6 +13,12 @@ export class SessionsService {
         return await this.sessionRepository.save(session);
     }
 
+    async setGeo(session: Session, country: string, city: string): Promise<Session> {
+        session.country = country;
+        session.city = city;
+        return await this.sessionRepository.save(session);
+    }
+
     async getByUser(user: User): Promise<Session[]> {
         return await this.sessionRepository.find({ where: { user: user } });
     }

@@ -7,6 +7,7 @@ import { Wallet } from '../wallets/wallets.entity';
 import { News } from '../news/news.entity';
 import { NewsComment } from '../news/comments/news.comments.entity';
 import { Texture } from './textures/textures.types';
+import { UserParams } from './users.types';
 
 @Entity("users")
 export class User {
@@ -37,7 +38,7 @@ export class User {
     /**
      * Check if user confirmed his email
      */
-    @Column({ type: "boolean", default: false, select: false })
+    @Column({ type: "boolean", default: false })
     isEmailConfirmed: boolean;
 
     /**
@@ -78,12 +79,13 @@ export class User {
     cloak: number | Texture | boolean;
 
     /**
-     * BANNER: 0 - Standart banner(choosed from MP library)
-     *         1 - uploaded banner
-     *         2 - uploaded ANIMATED banner (INDEV)
+     * BANNER: 0 - Color banner
+     *         1 - Banner from library
+     *         2 - uploaded banner
+     *         3 - uploaded ANIMATED banner (INDEV)
      */
     @Column({ type: "integer", default: 0 })
-    banner: number | Texture | boolean;
+    banner: number | Texture | boolean | string;
 
     /**
      * AVATAR: 0 - Skin face avatar(2d, isometric)
@@ -108,7 +110,7 @@ export class User {
     @OneToOne(type => Wallet, wallet => wallet.user)
     wallet: Wallet;
 
-    @ManyToOne(() => Role, (role) => role.users)
+    @OneToOne(type => Role, role => role.users)
     role: Role
 
     @Column({ type: 'bigint', readonly: true, default: 0 })
@@ -118,4 +120,7 @@ export class User {
     updateDateCreation() {
         this.createdAt = Math.round(new Date().getTime() / 1000);
     }
+
+    @Column({ type: "simple-json", default: { banner: "#FFFFFF" } })
+    params: UserParams
 }

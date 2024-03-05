@@ -73,7 +73,21 @@ export class WalletsService {
         return wallet;
     }
 
-    async getByUser(user: User): Promise<Wallet | undefined> {
-        return await this.walletsRepository.findOne({ where: { user: user } });
+    async getByUser(user: User, unionCoins = false): Promise<Wallet | undefined> {
+        let wallet = await this.walletsRepository.findOne({ where: { user: user } });
+
+        if(unionCoins){
+            wallet = this.unionCoins(wallet);
+        }
+
+        return wallet;
+    }
+
+    unionCoins(wallet: Wallet): Wallet {
+        wallet.coins = wallet.realcoins + wallet.gamecoins;
+        delete wallet.gamecoins;
+        delete wallet.realcoins;
+
+        return wallet;
     }
 }

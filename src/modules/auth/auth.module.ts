@@ -9,6 +9,7 @@ import { JwtAccess } from '../../helpers/keystore.helper';
 import { ConfigModule } from '@nestjs/config';
 import { VerifyModule } from '../verify/verify.module';
 import { WalletsModule } from '../wallets/wallets.module';
+import { BullModule } from '@nestjs/bull';
 
 
 @Module({
@@ -27,6 +28,9 @@ import { WalletsModule } from '../wallets/wallets.module';
       publicKey: JwtAccess.public,
       signOptions: { expiresIn: '60m', algorithm: 'RS256' },
     }),
+    BullModule.registerQueue({
+      name: 'geoDetect',
+  }),
   ],
   providers: [AuthService],
   controllers: [AuthController, AuthConfirmController],

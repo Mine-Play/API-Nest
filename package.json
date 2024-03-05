@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@babel/core": "^7.23.9",
     "@nestjs-modules/mailer": "^1.10.3",
     "@nestjs/bull": "^10.0.1",
     "@nestjs/cache-manager": "^2.2.0",
