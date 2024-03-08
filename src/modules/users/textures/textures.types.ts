@@ -3,4 +3,5 @@ export interface Texture {
     color?: string;
     url?:  string | boolean;
     type?: string | boolean;
+    image?: string;
 }

@@ -3,7 +3,6 @@ import { Injectable, HttpStatus } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { UnauthorizedException } from '../../exceptions/UnauthorizedException';
-import IPinfoWrapper from "node-ipinfo";
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import * as useragent from 'useragent';
@@ -13,6 +12,7 @@ import { User } from '../users/users.entity';
 import { EmailHelper } from 'src/helpers/email.helper';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { GoogleProvider } from 'src/services/authProviders/google.provider';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +22,7 @@ export class AuthService {
     private jwtService: JwtService,
     private confirmationsService: VerifyService,
     private walletsService: WalletsService,
+    private googleProvider: GoogleProvider,
     @InjectQueue('geoDetect') private geoDetectQueue: Queue
   ) {}
   async login(login, password) {
@@ -33,6 +34,20 @@ export class AuthService {
       this.confirmationsService.regenerate("email", user, true);
     } 
     return user;
+  }
+
+  async getRedirectURL(provider: string): Promise<string> {
+    switch(provider) {
+      case "google":
+        return this.googleProvider.getRedirectURL();
+    }
+  }
+
+  async callback(provider: string, request): Promise<string> {
+    switch(provider) {
+      case "google":
+        return this.googleProvider.callback(request);
+    }
   }
 
   /**
@@ -56,11 +71,11 @@ export class AuthService {
 
     //Check unique after finish 2 queries
     if (uniqueValidator[0]) {
-        throw new BadRequestException(4101, "Current name already exists");
+        throw new BadRequestException(4101, "Данный ник уже зарегистрирован!");
     }
 
     if (uniqueValidator[1]) {
-      throw new BadRequestException(4101, "Current email already exists");
+      throw new BadRequestException(4101, "Данная почта уже зарегистрирована!");
     }
     const hash = await argon2.hash(password);
     const user = await this.usersService.create({
@@ -72,7 +87,14 @@ export class AuthService {
     this.walletsService.register(user);
     return user;
   }
-
+  async logout(userId: string, sessionId: string): Promise<boolean> {
+    const user = await this.usersService.getById(userId);
+    if(!user) {
+      return false;
+    }
+    const session = await this.sessionsService.getById(sessionId);
+    this.sessionsService.destroy(session);
+  }
   async respondWithToken(user: User, request){
     const agent = await useragent.parse(request.headers['user-agent']);
     let device;

@@ -120,3 +120,9 @@ export class TokenExpiredException extends HttpException {
     super({ status: 4013, message: "Token has been refreshed.", tokenType: 'Bearer', token: token  }, HttpStatus.FORBIDDEN);
   }
 }
+
+export class EmailNotConfirmedException extends HttpException {
+  constructor() {
+      super({ status: 4014, message: "Email not confirmed." }, HttpStatus.FORBIDDEN);
+  }
+}

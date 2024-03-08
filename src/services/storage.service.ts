@@ -18,7 +18,7 @@ export class StorageService
         return await this.s3_upload(file.buffer, this.S3_BUCKET, path, name, file.mimetype);
     }
     get(path){
-        return process.env.S3_URL + `/${path}`
+        return process.env.S3_URL + `${path}`
     }
     async s3_upload(file, bucket, path, name, mimetype): Promise<string | boolean>
     {

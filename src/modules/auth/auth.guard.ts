@@ -1,6 +1,8 @@
+import { UsersService } from './../users/users.service';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
+  EmailNotConfirmedException,
   SessionExpiredException,
   TokenExpiredException,
   UnauthorizedException,
@@ -49,5 +51,22 @@ export class AuthGuard implements CanActivate {
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
+  }
+}
+
+@Injectable()
+export class EmailConfirmedGuard implements CanActivate {
+  constructor(
+    private usersService: UsersService
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+
+    const user = await this.usersService.getById(request.user.id);
+    if(!user.isEmailConfirmed){
+      throw new EmailNotConfirmedException();
+    }
+    return true;
   }
 }

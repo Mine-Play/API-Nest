@@ -6,12 +6,15 @@ import { StorageService } from 'src/services/storage.service';
 
 import { Texture } from './textures.types';
 
+import { Avatar } from 'src/helpers/avatar.helper';
+import { UploadSkinDto } from './dto/upload-skin.dto';
+import { BadRequestException } from 'src/exceptions/BadRequestException';
 @Injectable()
 export class TexturesService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>,
                                         private storageService: StorageService) {}
 
-    async getSkin(user: User): Promise<Texture> {
+    getSkin(user: User): Texture {
         let url, type, assetType;
         switch(user.skin){
             case 0:
@@ -60,12 +63,13 @@ export class TexturesService {
         return { url, assetType }
     }
 
-    async getAvatar(user: User): Promise<Texture | boolean> {
-        let url, assetType;
+    async getAvatar(user: User): Promise<Texture> {
+        let url, assetType, image;
         switch(user.avatar){
             case 0:
                 assetType = 0;
-                return false;
+                image = await Avatar.classic(this.getSkin(user).url);
+                return { assetType: assetType, image: image };
             case 1:
                 assetType = 1;
                 url = this.storageService.get(`/users/${user.id}/cloaks/cloak.png`);
@@ -84,7 +88,6 @@ export class TexturesService {
 
     async getBanner(user: User): Promise<Texture | boolean | string> {
         let url, assetType;
-        console.log(user.banner)
         switch(user.banner){
             case 0:
                 return { assetType: 0, color: user.params.banner };
@@ -104,13 +107,11 @@ export class TexturesService {
         return { url, assetType }
     }
 
-    // async uploadSkin(user: User, skin): Promise<Texture | boolean> {
-    //     let url: string | boolean = await this.storageService.upload(skin, `/users/${user.id}/skins`, 'skin.png');
-    //     let type: string | boolean = false;
-
-    //     if(url){
-            
-    //     }
-    //     return { url, type }
-    // }
+    async uploadSkin(user: User, dto: UploadSkinDto): Promise<Texture> {
+        const url: string | boolean = await this.storageService.upload(dto.skin, `/users/${user.id}/skins`, 'skin.png');
+        if(dto.type != 'slim' && dto.type != 'default') {
+            throw new BadRequestException(4101, 'Invalid skin type.');
+        }
+        return { assetType: 1, url, type: dto.type }
+    }
 }

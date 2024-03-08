@@ -8,6 +8,7 @@ import { News } from '../news/news.entity';
 import { NewsComment } from '../news/comments/news.comments.entity';
 import { Texture } from './textures/textures.types';
 import { UserParams } from './users.types';
+import { AuthProvider } from '../auth/auth.provider.entity';
 
 @Entity("users")
 export class User {
@@ -93,7 +94,7 @@ export class User {
      *         2 - uploaded ANIMATED avatar (INDEV)
      */
     @Column({ type: "integer", default: 0 })
-    avatar: number;
+    avatar: number | Texture;
 
     @OneToMany(type => Session, session => session.user)
     sessions: Session[];
@@ -104,13 +105,17 @@ export class User {
     @OneToMany(() => News, (news) => news.author)
     news: News[];
 
+    @OneToMany(() => AuthProvider, (provider) => provider.user)
+    providers: AuthProvider[];
+
     @OneToMany(() => NewsComment, (comment) => comment.author)
     comments: NewsComment[]
 
     @OneToOne(type => Wallet, wallet => wallet.user)
     wallet: Wallet;
 
-    @OneToOne(type => Role, role => role.users)
+    @ManyToOne(type => Role, role => role.users)
+    @JoinColumn()
     role: Role
 
     @Column({ type: 'bigint', readonly: true, default: 0 })

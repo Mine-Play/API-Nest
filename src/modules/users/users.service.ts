@@ -16,10 +16,12 @@ export class UsersService {
 
     async create(dto: RegisterUserDto, roleId: number = null): Promise<User> {
         const role = await this.rolesService.getDefault();
+        console.log(role)
         const user = await this.userRepository.create({
             ...dto,
             role: role
         });
+        console.log(user)
         return await this.userRepository.save(user);
     }
     async emailConfirm(user: User){
@@ -47,12 +49,15 @@ export class UsersService {
     }
 
     async getMe(id: string): Promise<User | undefined> {
-        const user = await this.userRepository.findOne({ where: { id: id }, select: ['id', 'name', 'level', 'exp', 'avatar', 'skin', 'cloak', 'lastLogin', 'createdAt', 'role', 'banner', 'params'] });
-        // user.role = await this.rolesService.findById(user.role);
-        user.wallet = await this.walletService.getByUser(user, true);
-        user.skin = await this.texturesService.getSkin(user);
-        user.cloak = await this.texturesService.getCloak(user);
-        user.banner = await this.texturesService.getBanner(user);
+        const user = await this.userRepository.findOne({ where: { id: id }, select: ['id', 'name', 'level', 'exp', 'avatar', 'skin', 'cloak', 'lastLogin', 'createdAt', 'role', 'banner', 'avatar', 'params'] });
+        const avatar = await this.texturesService.getAvatar(user);
+        const userSpecial = await Promise.all([this.walletService.getByUser(user, true), this.texturesService.getSkin(user), this.texturesService.getCloak(user), this.texturesService.getBanner(user), await this.rolesService.findByUser(user)]);
+        user.avatar = avatar;
+        user.wallet = userSpecial[0];
+        user.skin = userSpecial[1];
+        user.cloak = userSpecial[2];
+        user.banner = userSpecial[3];
+        user.role = userSpecial[4];
         delete user.params;
         return user;
     }

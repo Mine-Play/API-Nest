@@ -113,6 +113,6 @@ export class VerifyService {
     }
 
     private code(): number{
-        return Math.round(Math.random() * (999999 - 100000) + 100000);
+        return Math.round(Math.random() * (99999 - 10000) + 10000);
     }
 }

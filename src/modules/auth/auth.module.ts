@@ -10,6 +10,9 @@ import { ConfigModule } from '@nestjs/config';
 import { VerifyModule } from '../verify/verify.module';
 import { WalletsModule } from '../wallets/wallets.module';
 import { BullModule } from '@nestjs/bull';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthProvider } from './auth.provider.entity';
+import { GoogleProvider } from 'src/services/authProviders/google.provider';
 
 
 @Module({
@@ -19,6 +22,7 @@ import { BullModule } from '@nestjs/bull';
     SessionsModule,
     VerifyModule,
     WalletsModule,
+    TypeOrmModule.forFeature([ AuthProvider ]),
     JwtModule.register({
       global: true,
       privateKey: {
@@ -32,7 +36,7 @@ import { BullModule } from '@nestjs/bull';
       name: 'geoDetect',
   }),
   ],
-  providers: [AuthService],
+  providers: [AuthService, GoogleProvider],
   controllers: [AuthController, AuthConfirmController],
   exports: [AuthService],
 })

@@ -31,6 +31,10 @@ export class SessionsService {
         this.sessionRepository.save(session);
         return session;
     }
+
+    async destroy(session: Session) {
+        return await this.sessionRepository.remove(session);
+    }
     
     private hash(): string{
         let result;
