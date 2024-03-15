@@ -12,6 +12,12 @@ export class ServersController {
         res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: servers });
     }
 
+    @Get('/summaryOnline')
+    async getSummaryOnline(@Res() res: Response) {
+        const online = await this.serversService.getSummaryOnline();
+        res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: { online: online } });
+    }
+
     // @Get('monitoring')
     // async getProfile(@Req() request, @Body() dto: CreateNewDto) {
     //     const user = await this.usersService.getById(request.user.id);

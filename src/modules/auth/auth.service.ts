@@ -43,12 +43,12 @@ export class AuthService {
     }
   }
 
-  async callback(provider: string, request): Promise<string> {
-    switch(provider) {
-      case "google":
-        return this.googleProvider.callback(request);
-    }
-  }
+  // async callback(provider: string, request): Promise<string> {
+  //   switch(provider) {
+  //     case "google":
+  //       return this.googleProvider.callback(request);
+  //   }
+  // }
 
   /**
    * Register a user

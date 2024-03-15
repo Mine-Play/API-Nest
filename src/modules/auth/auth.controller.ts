@@ -22,10 +22,10 @@ export class AuthController {
     return this.authService.getRedirectURL("google");
   }
 
-  @Get('login/google/callback')
-  async googleCallback(@Req() request: Request) {
-    return this.authService.callback("google", request);
-  }
+  // @Get('login/google/callback')
+  // async googleCallback(@Req() request: Request) {
+  //   return this.authService.callback("google", request);
+  // }
   
   @Throttle({ default: { limit: 3, ttl: 15000 } })
   @Post('register')
