@@ -106,7 +106,7 @@ export class UnauthorizedException extends HttpException {
     constructor() {
       super({ status: 4011, message: "Unauthorized." }, HttpStatus.FORBIDDEN);
     }
-  }
+}
 
   
 export class SessionExpiredException extends HttpException {
@@ -124,5 +124,11 @@ export class TokenExpiredException extends HttpException {
 export class EmailNotConfirmedException extends HttpException {
   constructor() {
       super({ status: 4014, message: "Email not confirmed." }, HttpStatus.FORBIDDEN);
+  }
+}
+
+export class TwoFactorInvalidException extends HttpException {
+  constructor() {
+    super({ status: 4015, message: "Two factor authentication failed." }, HttpStatus.FORBIDDEN);
   }
 }

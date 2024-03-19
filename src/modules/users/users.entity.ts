@@ -51,7 +51,7 @@ export class User {
 
     @BeforeInsert()
     updateDatePasswordReset() {
-        this.passwordReset_at = Date.now();
+        this.passwordReset_at = Math.floor(Date.now() / 1000);
     }
 
     @Column({ type: "timestamp", nullable: true })
@@ -123,7 +123,7 @@ export class User {
 
     @BeforeInsert()
     updateDateCreation() {
-        this.createdAt = Math.round(new Date().getTime() / 1000);
+        this.createdAt = Math.floor(Date.now() / 1000);
     }
 
     @Column({ type: "simple-json", default: { banner: "#FFFFFF" } })

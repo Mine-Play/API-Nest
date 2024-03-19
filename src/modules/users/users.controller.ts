@@ -2,15 +2,33 @@ import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@n
 import { Response } from 'express';
 import { UsersService } from './users.service';
 import { AuthGuard, EmailConfirmedGuard } from '../auth/auth.guard';
+import { RolesService } from '../roles/roles.service';
+import { TexturesService } from './textures/textures.service';
+import { WalletsService } from '../wallets/wallets.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(private userService: UsersService){}
+    constructor(private userService: UsersService,
+                private rolesService: RolesService,
+                private walletService: WalletsService,
+                private texturesService: TexturesService){}
 
+    /**
+     * Select values: 'id', 'name', 'level', 'exp', 'avatar', 'skin', 'cloak', 'lastLogin', 'createdAt', 'role', 'banner', 'avatar', 'params'
+     */
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Get("/me")
     async me(@Req() request, @Res() res: Response) {
-        const user = await this.userService.getMe(request.user.id);
+        const user = await this.userService.getMe(request.user.id, ['id', 'name', 'level', 'exp', 'avatar', 'skin', 'cloak', 'lastLogin', 'createdAt', 'role', 'banner', 'avatar', 'params']);
+        const avatar = await this.texturesService.getUserAvatar(user);
+        const userSpecial = await Promise.all([this.walletService.getByUser(user, true), this.texturesService.getUserSkin(user), this.texturesService.getUserCloak(user), this.texturesService.getUserBanner(user), await this.rolesService.findByUser(user)]);
+        user.avatar = avatar;
+        user.wallet = userSpecial[0];
+        user.skin = userSpecial[1];
+        user.cloak = userSpecial[2];
+        user.banner = userSpecial[3];
+        user.role = userSpecial[4];
+        delete user.params;
         res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: user });
     }
 }

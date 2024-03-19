@@ -7,5 +7,5 @@ export class UploadSkinDto {
 
     @IsFile()
     @HasMimeType(['image/jpeg', 'image/png'])
-    readonly skin: any;
+    readonly file: any;
 }

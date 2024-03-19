@@ -13,6 +13,7 @@ export class ErrorFilter implements ExceptionFilter {
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
         console.error(error.stack);
         return response.status(status).render('views/500');
+    return response;
     }
   }
 }

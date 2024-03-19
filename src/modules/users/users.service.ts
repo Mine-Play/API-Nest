@@ -4,24 +4,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { RolesService } from '../roles/roles.service';
-import { WalletsService } from '../wallets/wallets.service';
-import { TexturesService } from './textures/textures.service';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>,
-                                         private rolesService: RolesService,
-                                         private walletService: WalletsService,
-                                         private texturesService: TexturesService) {}
+                                         private rolesService: RolesService) {}
 
     async create(dto: RegisterUserDto, roleId: number = null): Promise<User> {
         const role = await this.rolesService.getDefault();
-        console.log(role)
         const user = await this.userRepository.create({
             ...dto,
             role: role
         });
-        console.log(user)
         return await this.userRepository.save(user);
     }
     async emailConfirm(user: User){
@@ -48,17 +43,33 @@ export class UsersService {
         return user;
     }
 
-    async getMe(id: string): Promise<User | undefined> {
-        const user = await this.userRepository.findOne({ where: { id: id }, select: ['id', 'name', 'level', 'exp', 'avatar', 'skin', 'cloak', 'lastLogin', 'createdAt', 'role', 'banner', 'avatar', 'params'] });
-        const avatar = await this.texturesService.getAvatar(user);
-        const userSpecial = await Promise.all([this.walletService.getByUser(user, true), this.texturesService.getSkin(user), this.texturesService.getCloak(user), this.texturesService.getBanner(user), await this.rolesService.findByUser(user)]);
-        user.avatar = avatar;
-        user.wallet = userSpecial[0];
-        user.skin = userSpecial[1];
-        user.cloak = userSpecial[2];
-        user.banner = userSpecial[3];
-        user.role = userSpecial[4];
-        delete user.params;
-        return user;
+    /**
+     * 
+     * @param id user id
+     * @returns Authorized user object
+     */
+    async getMe(id: string, select = null): Promise<User | undefined> {
+        if(select){
+            return await this.userRepository.findOne({ where: { id: id }, select: select });
+        }
+        return await this.userRepository.findOne({ where: { id: id } });
+    }
+
+    async setSkin(user: User, skinType: number, skinID: string = null): Promise<User> {
+        user.skin = skinType;
+
+        if(skinType === 3) {
+            user.params.skin = skinID;
+        }
+        return await this.userRepository.save(user);
+    }
+    
+    async changePassword(user: User, password: string): Promise<boolean> {
+        const hash = await argon2.hash(password);
+        user.password = hash;
+        user.passwordReset_at = Math.floor(Date.now() / 1000);
+        await this.userRepository.save(user);
+
+        return true;
     }
 }

@@ -4,4 +4,5 @@ export interface Texture {
     url?:  string | boolean;
     type?: string | boolean;
     image?: string;
+    etc?: any;
 }
