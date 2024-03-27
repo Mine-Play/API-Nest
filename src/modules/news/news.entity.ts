@@ -6,8 +6,11 @@ import { NewsComment } from './comments/news.comments.entity';
 
 @Entity("news")
 export class News {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @PrimaryGeneratedColumn("uuid")
-    id: string;
+    uuid: string;
 
     @Column({ type: "varchar" })
     slug: string;
@@ -26,6 +29,9 @@ export class News {
 
     @Column({ type: "integer", default: 0 })
     likes: number;
+
+    @Column({ type: "integer" })
+    time: number;
 
     @Column({ type: "json", default: null })
     anchors: Anchor[];

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne, BeforeInsert, OneToOne, JoinColumn } from 'typeorm';
-import { Session } from '../sessions/sessions.entity';
+import { Session } from './sessions/sessions.entity';
 import { Role } from '../roles/roles.entity';
 import { Confirmation } from '../verify/verify.entity';
 import { Type } from 'class-transformer';
@@ -8,7 +8,7 @@ import { News } from '../news/news.entity';
 import { NewsComment } from '../news/comments/news.comments.entity';
 import { Texture } from './textures/textures.types';
 import { UserParams } from './users.types';
-import { AuthProvider } from '../auth/auth.provider.entity';
+import { AuthProvider } from './auth/auth.provider.entity';
 
 @Entity("users")
 export class User {

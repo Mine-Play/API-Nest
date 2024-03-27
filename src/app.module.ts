@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from './modules/users/auth/auth.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { RolesModule } from './modules/roles/roles.module';
 import { WalletsModule } from './modules/wallets/wallets.module'
@@ -24,7 +24,6 @@ import { ServersModule } from './modules/servers/servers.module';
 import { ItemsModule } from './modules/items/items.module';
 import { ShopModule } from './modules/shop/shop.module';
 import { NewsModule } from './modules/news/news.module';
-import { SessionsModule } from './modules/sessions/sessions.module';
 
 const TypeORMConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -100,8 +99,7 @@ const TypeORMConfig: TypeOrmModuleOptions = {
     ServersModule,
     ItemsModule,
     ShopModule,
-    NewsModule,
-    SessionsModule
+    NewsModule
   ],
   controllers: [],
   providers: [

@@ -1,4 +1,4 @@
-import { IsAlphanumeric, IsEmail, IsNotEmpty, IsUUID, MaxLength, MinLength } from "class-validator";
+import { IsNotEmpty, IsNumber, IsUUID } from "class-validator";
 
 export class CreateNewDto {
     @IsNotEmpty()
@@ -9,6 +9,10 @@ export class CreateNewDto {
     
     @IsNotEmpty()
     readonly fullStory: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    readonly time: number;
     
     @IsUUID()
     readonly category: string;

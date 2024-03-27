@@ -1,8 +1,8 @@
 import { Body, Controller, Post, HttpStatus, UseGuards, Get, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { RegisterUserDto } from '../users/dto/register-user.dto';
-import { LoginUserDto } from '../users/dto/login-user.dto';
+import { RegisterUserDto } from '../dto/register-user.dto';
+import { LoginUserDto } from '../dto/login-user.dto';
 import { Throttle } from '@nestjs/throttler';
 import { Response } from 'express';
 

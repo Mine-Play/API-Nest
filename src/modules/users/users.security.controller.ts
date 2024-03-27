@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
-import { AuthGuard, EmailConfirmedGuard } from '../auth/auth.guard';
+import { AuthGuard, EmailConfirmedGuard } from './auth/auth.guard';
 import { dateInterval } from 'src/helpers/language.helper';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import * as argon2 from 'argon2';

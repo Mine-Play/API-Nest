@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
-import { AuthGuard, EmailConfirmedGuard } from '../auth/auth.guard';
+import { AuthGuard, EmailConfirmedGuard } from './auth/auth.guard';
 import { RolesService } from '../roles/roles.service';
 import { TexturesService } from './textures/textures.service';
 import { WalletsService } from '../wallets/wallets.service';

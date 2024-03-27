@@ -1,4 +1,4 @@
-import { UsersService } from './../users/users.service';
+import { UsersService } from '../users.service';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -6,7 +6,7 @@ import {
   SessionExpiredException,
   TokenExpiredException,
   UnauthorizedException,
-} from '../../exceptions/UnauthorizedException';
+} from '../../../exceptions/UnauthorizedException';
 import { Request } from 'express';
 import { SessionsService } from '../sessions/sessions.service';
 

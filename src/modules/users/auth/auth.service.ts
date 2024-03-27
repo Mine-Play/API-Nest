@@ -1,14 +1,14 @@
-import { BadRequestException } from './../../exceptions/BadRequestException';
+import { BadRequestException } from '../../../exceptions/BadRequestException';
 import { Injectable, HttpStatus } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users.service';
 import { SessionsService } from '../sessions/sessions.service';
-import { UnauthorizedException } from '../../exceptions/UnauthorizedException';
+import { UnauthorizedException } from '../../../exceptions/UnauthorizedException';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import * as useragent from 'useragent';
-import { VerifyService } from '../verify/verify.service';
-import { WalletsService } from '../wallets/wallets.service';
-import { User } from '../users/users.entity';
+import { VerifyService } from '../../verify/verify.service';
+import { WalletsService } from '../../wallets/wallets.service';
+import { User } from '../users.entity';
 import { EmailHelper } from 'src/helpers/email.helper';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
@@ -134,6 +134,7 @@ export class AuthService {
     const payload = { id: user.id, session: session.id };
     return {
       status: HttpStatus.OK,
+      name: user.name,
       tokenType: 'Bearer',
       token: await this.jwtService.signAsync(payload),
       session: session.id,

@@ -1,7 +1,7 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import IPinfoWrapper from 'node-ipinfo';
-import { SessionsService } from 'src/modules/sessions/sessions.service';
+import { SessionsService } from 'src/modules/users/sessions/sessions.service';
 
 @Processor('geoDetect')
 export class GeoDetectProcessor {

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { TexturesService } from './textures.service';
-import { AuthGuard, EmailConfirmedGuard } from '../../auth/auth.guard';
+import { AuthGuard, EmailConfirmedGuard } from '../auth/auth.guard';
 import { UsersService } from '../users.service';
 import { UploadSkinDto } from './dto/upload-skin.dto';
 import { FormDataRequest } from 'nestjs-form-data';

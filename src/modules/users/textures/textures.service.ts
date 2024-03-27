@@ -70,11 +70,11 @@ export class TexturesService {
     }
 
     async getUserAvatar(user: User): Promise<Texture> {
-        let url, assetType, image;
+        let url, assetType, image, skin;
         switch(user.avatar){
             case 0:
                 assetType = 0;
-                const skin = await this.getUserSkin(user);
+                skin = await this.getUserSkin(user);
                 image = await Avatar.classic(skin.url);
                 return { assetType: assetType, image: image };
             case 1:
@@ -87,7 +87,10 @@ export class TexturesService {
                 break;
             case 3:
                 assetType = 3;
-                url = this.storageService.get(`/users/${user.id}/cloaks/cloak.png`);
+                skin = await this.getUserSkin(user);
+                console.log(skin)
+                image = await Avatar.classic(skin.url);
+                return { assetType: assetType, image: image };
                 break;
         }
         return { url, assetType }

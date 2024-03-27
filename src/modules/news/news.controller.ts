@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { NewsService } from './news.service';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../users/auth/auth.guard';
 import { CreateNewDto } from './dto/create-new.dto';
 import { UsersService } from '../users/users.service';
+import { Response } from 'express';
 
 @Controller('news')
 export class NewsController {
@@ -10,14 +11,16 @@ export class NewsController {
                 private usersService: UsersService){}
 
     @Get('/')
-    getAll() {
-        return this.newsService.getAll();
+    async getAll(@Res() res: Response) {
+        return res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: await this.newsService.getAll() });
     }
 
     @UseGuards(AuthGuard)
     @Post('create')
     async getProfile(@Req() request, @Body() dto: CreateNewDto) {
         const user = await this.usersService.getById(request.user.id);
-        return await this.newsService.create(dto, user);
+        const newItem = await this.newsService.create(dto, user);
+
+        return newItem;
     }
 }

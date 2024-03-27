@@ -5,7 +5,6 @@ import { NewsCategory } from './categories/news.categories.entity';
 import { NewsComment } from './comments/news.comments.entity';
 import { NewsController } from './news.controller';
 import { NewsService } from './news.service';
-import { SessionsModule } from '../sessions/sessions.module';
 import { UsersModule } from '../users/users.module';
 import { NewsCategoriesService } from './categories/news.categories.service';
 
@@ -13,7 +12,6 @@ import { NewsCategoriesService } from './categories/news.categories.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ News, NewsCategory, NewsComment ]),
-    SessionsModule,
     UsersModule
   ],
   providers: [NewsService, NewsCategoriesService],

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
-import { VerifyService } from '../verify/verify.service';
-import { UsersService } from '../users/users.service';
+import { VerifyService } from '../../verify/verify.service';
+import { UsersService } from '../users.service';
 import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth/confirm')

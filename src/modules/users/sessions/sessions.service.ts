@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Session } from './sessions.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../users/users.entity';
+import { User } from '../users.entity';
 
 @Injectable()
 export class SessionsService {
@@ -23,6 +23,10 @@ export class SessionsService {
         return await this.sessionRepository.find({ where: { user: user } });
     }
 
+    async getCurrent(sessionId: string): Promise<Session[]> {
+        return await this.sessionRepository.find({ where: { id: sessionId } });
+    }
+
     async getById(id: string) {
         return await this.sessionRepository.findOne({ where: { id: id } });
     }
@@ -32,8 +36,12 @@ export class SessionsService {
         return session;
     }
 
-    async destroy(session: Session) {
+    async destroy(session) {
         return await this.sessionRepository.remove(session);
+    }
+
+    async destroyAll(user: User) {
+        
     }
     
     private hash(): string{

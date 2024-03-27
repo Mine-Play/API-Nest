@@ -29,6 +29,7 @@ export class NewsService {
             name: dto.name,
             shortStory: dto.shortStory,
             fullStory: dto.fullStory,
+            time: dto.time,
             author: user,
             slug: textToSlug(dto.name),
             category: validator[1],
@@ -38,6 +39,6 @@ export class NewsService {
     }
 
     async getAll(): Promise<News[]> {
-        return await this.newsRepository.find();
+        return await this.newsRepository.find({ select: ['id', 'uuid', 'slug', 'name', 'shortStory', 'views', 'likes', 'time', 'createdAt', 'updatedAt'] });
     }
 }

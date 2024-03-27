@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, UpdateDateColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { User } from '../users/users.entity';
+import { User } from '../users.entity';
 import { Type } from 'class-transformer';
 
 @Entity("sessions")
@@ -27,6 +27,8 @@ export class Session {
 
     @Column({ type: "varchar", default: false })
     expired: boolean;
+
+    isCurrent: boolean = false;
 
     @ManyToOne(() => User, (user) => user.sessions)
     user: User
