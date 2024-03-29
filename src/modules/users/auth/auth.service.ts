@@ -59,7 +59,7 @@ export class AuthService {
    * 
    * Errors: 4101 - name or email already registered
    */
-  async register(name, email, password) {
+  async register(name, email, password, invitedBy) {
 
     /**
      * User's data unique validation
@@ -75,14 +75,14 @@ export class AuthService {
     }
 
     if (uniqueValidator[1]) {
-      throw new BadRequestException(4101, "Данная почта уже зарегистрирована!");
+      throw new BadRequestException(4102, "Данная почта уже зарегистрирована!");
     }
     const hash = await argon2.hash(password);
     const user = await this.usersService.create({
       name: name,
       email: email,
       password: hash
-    });
+    }, invitedBy);
     this.confirmationsService.generate("email", user);
     this.walletsService.register(user);
     return user;

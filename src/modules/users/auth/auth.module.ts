@@ -12,6 +12,7 @@ import { BullModule } from '@nestjs/bull';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthProvider } from './auth.provider.entity';
 import { GoogleProvider } from 'src/services/authProviders/google.provider';
+import { ReferalsModule } from 'src/modules/referals/referals.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { GoogleProvider } from 'src/services/authProviders/google.provider';
     UsersModule,
     VerifyModule,
     WalletsModule,
+    ReferalsModule,
     TypeOrmModule.forFeature([ AuthProvider ]),
     JwtModule.register({
       global: true,

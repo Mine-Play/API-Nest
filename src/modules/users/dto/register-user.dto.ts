@@ -11,4 +11,6 @@ export class RegisterUserDto {
     
     @MinLength(8, { message: 'Минимальная длинна пароля - 8 символов!' })
     readonly password: string;
+
+    readonly invitedBy?: string;
 }

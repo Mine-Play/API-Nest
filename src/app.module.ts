@@ -21,9 +21,10 @@ import { VerifyModule } from './modules/verify/verify.module';
 import { EmailProcessor } from './processors/Email.processor';
 import { GeoDetectProcessor } from './processors/GeoDetect.processor';
 import { ServersModule } from './modules/servers/servers.module';
-import { ItemsModule } from './modules/items/items.module';
-import { ShopModule } from './modules/shop/shop.module';
 import { NewsModule } from './modules/news/news.module';
+import { AppController } from './app.controller';
+import { ReferalsModule } from './modules/referals/referals.module';
+import { ItemsModule } from './modules/items/items.module';
 
 const TypeORMConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -97,11 +98,11 @@ const TypeORMConfig: TypeOrmModuleOptions = {
     UiModule,
     VerifyModule,
     ServersModule,
-    ItemsModule,
-    ShopModule,
-    NewsModule
+    NewsModule,
+    ReferalsModule,
+    ItemsModule
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,

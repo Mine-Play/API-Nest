@@ -98,3 +98,8 @@ export function dateInterval(date: number): string {
 		return `${Math.floor(interval / 31536000)} лет`;
 	}
 }
+
+export function isUUID(string: string): boolean {
+	const regexExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+	return regexExp.test(string);
+}

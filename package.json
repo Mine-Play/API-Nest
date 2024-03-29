@@ -30,8 +30,10 @@
     "@nestjs/devtools-integration": "^0.1.6",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-socket.io": "^10.3.7",
     "@nestjs/throttler": "^5.1.1",
     "@nestjs/typeorm": "^10.0.1",
+    "@nestjs/websockets": "^10.3.7",
     "argon2": "^0.31.2",
     "aws-sdk": "^2.1529.0",
     "bull": "^4.12.0",
@@ -54,6 +56,7 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
+    "robokassa-node": "^1.1.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
     "useragent": "^2.3.0"

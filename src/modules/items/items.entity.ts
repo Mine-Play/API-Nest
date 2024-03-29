@@ -1,19 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { ItemType } from './types/types.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne } from 'typeorm';
+import { ShopItem } from './shop/shop.entity';
 
-@Entity("items")
+
+@Entity("Items")
 export class Item {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
-
-    @Column({ type: "varchar" })
-    slug: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column({ type: "varchar" })
     name: string;
 
-    @ManyToOne(() => ItemType, (itemType) => itemType.items)
-    @JoinColumn()
-    type: ItemType
+    @Column({ type: "varchar" })
+    type: "PERSONALIZE" | "SERVICE" | "STATUS" | "PERK" | "KIT";
 
+    @OneToOne(type => ShopItem, shopItem => shopItem.item)
+    @JoinColumn({ name: "id" })
+    shop: ShopItem;
 }

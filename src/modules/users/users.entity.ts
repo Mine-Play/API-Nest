@@ -9,6 +9,7 @@ import { NewsComment } from '../news/comments/news.comments.entity';
 import { Texture } from './textures/textures.types';
 import { UserParams } from './users.types';
 import { AuthProvider } from './auth/auth.provider.entity';
+import { Referal } from '../referals/referals.entity';
 
 @Entity("users")
 export class User {
@@ -24,6 +25,7 @@ export class User {
     
     @Column({ type: "varchar" })
     password: string;
+
 
     /**
      * This is a GLOBAL level system
@@ -117,6 +119,13 @@ export class User {
     @ManyToOne(type => Role, role => role.users)
     @JoinColumn()
     role: Role
+
+    @ManyToOne(type => Referal, Referal => Referal.invited)
+    @JoinColumn({ name: "invitedBy" })
+    invitedBy: Referal
+
+    @OneToOne(type => Referal, referal => referal.user)
+    referal: Referal;
 
     @Column({ type: 'bigint', readonly: true, default: 0 })
     createdAt: number;

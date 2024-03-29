@@ -5,10 +5,13 @@ import { RegisterUserDto } from '../dto/register-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { Throttle } from '@nestjs/throttler';
 import { Response } from 'express';
+import { ReferalsService } from 'src/modules/referals/referals.service';
+import { BadRequestException } from 'src/exceptions/BadRequestException';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,
+              private referalsService: ReferalsService) {}
 
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post('login')
@@ -30,7 +33,14 @@ export class AuthController {
   @Throttle({ default: { limit: 3, ttl: 15000 } })
   @Post('register')
   async register(@Req() request, @Body() dto: RegisterUserDto) {
-    const user = await this.authService.register(dto.name, dto.email, dto.password);
+    let referal = null;
+    if(dto.invitedBy != null) {
+      referal = await this.referalsService.getByName(dto.invitedBy);
+      if(!referal) {
+          throw new BadRequestException(4103, "Referal not found");
+      }
+    } 
+    const user = await this.authService.register(dto.name, dto.email, dto.password, referal);
     return this.authService.respondWithToken(user, request);
   }
 

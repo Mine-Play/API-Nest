@@ -11,11 +11,10 @@ export class UsersService {
     constructor(@InjectRepository(User) private userRepository: Repository<User>,
                                          private rolesService: RolesService) {}
 
-    async create(dto: RegisterUserDto, roleId: number = null): Promise<User> {
+    async create(dto: RegisterUserDto, invitedBy = null, roleId: number = null): Promise<User> {
         const role = await this.rolesService.getDefault();
         const user = await this.userRepository.create({
-            ...dto,
-            role: role
+            ...dto, role, invitedBy
         });
         return await this.userRepository.save(user);
     }

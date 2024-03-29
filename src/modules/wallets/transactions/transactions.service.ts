@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Wallet } from '../wallets.entity';
 import { Repository } from 'typeorm';
 import { Transaction } from './transactions.entity';
-import { Item } from 'src/modules/items/items.entity';
 
 @Injectable()
 export class WalletsService {
@@ -14,7 +13,7 @@ export class WalletsService {
 
     }
 
-    async makeTransaction(item: Item, wallet: Wallet, amount: number = null) {
+    // async makeTransaction(item: Item, wallet: Wallet, amount: number = null) {
         
-    }
+    // }
 }
