@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { ShopItem } from './shop/shop.entity';
+import { ItemPersonalization } from './types/personalization/personalization.entity';
 
 
 @Entity("Items")
@@ -12,8 +13,4 @@ export class Item {
 
     @Column({ type: "varchar" })
     type: "PERSONALIZE" | "SERVICE" | "STATUS" | "PERK" | "KIT";
-
-    @OneToOne(type => ShopItem, shopItem => shopItem.item)
-    @JoinColumn({ name: "id" })
-    shop: ShopItem;
 }

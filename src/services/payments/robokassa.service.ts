@@ -11,4 +11,8 @@ export class RobokassaService
         passwordTwo: process.env.ROBOKASSA_PASSWORD_2,
         hashAlgo: 'SHA512',
     });
+
+    async getPaymentLink() {
+        
+    }
 }

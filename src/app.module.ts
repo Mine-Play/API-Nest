@@ -25,6 +25,8 @@ import { NewsModule } from './modules/news/news.module';
 import { AppController } from './app.controller';
 import { ReferalsModule } from './modules/referals/referals.module';
 import { ItemsModule } from './modules/items/items.module';
+import { ItemPersonalizeModule } from './modules/items/types/personalization/personalization.module';
+import { ShopItemModule } from './modules/items/shop/shop.module';
 
 const TypeORMConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -100,7 +102,9 @@ const TypeORMConfig: TypeOrmModuleOptions = {
     ServersModule,
     NewsModule,
     ReferalsModule,
-    ItemsModule
+    ItemsModule,
+    ItemPersonalizeModule,
+    ShopItemModule
   ],
   controllers: [AppController],
   providers: [
