@@ -7,7 +7,7 @@ import { ShopItem } from './shop.entity';
   providers: [],
   exports: [],
   imports: [
-    TypeOrmModule.forFeature([ ShopItem ], 'minigames')
+    TypeOrmModule.forFeature([ ShopItem ])
   ],
 })
 export class ShopItemModule {}

@@ -13,7 +13,7 @@ export class ReferalsController {
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Get("/register")
     async registerReferal(@Req() request, @Res() res: Response) {
-        const user = await this.userService.getMe(request.user.id, ['id']);
+        const user = await this.userService.getById(request.user.id, ['id']);
         if(await this.referalsService.getByUser(user) != null) {
             throw new BadRequestException(4101, "User already has a referal!");
         }
@@ -25,7 +25,7 @@ export class ReferalsController {
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Get("/my")
     async getMyReferal(@Req() request, @Res() res: Response) {
-        const user = await this.userService.getMe(request.user.id, ['id']);
+        const user = await this.userService.getById(request.user.id, ['id']);
         const referal = await this.referalsService.getByUser(user);
         res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: referal });
     }

@@ -8,7 +8,7 @@ import { ItemPersonalizationRarity } from './rarity/personalization.rarity.entit
   providers: [],
   exports: [],
   imports: [
-    TypeOrmModule.forFeature([ ItemPersonalization, ItemPersonalizationRarity ], 'minigames')
+    TypeOrmModule.forFeature([ ItemPersonalization, ItemPersonalizationRarity ])
   ],
 })
 export class ItemPersonalizeModule {}

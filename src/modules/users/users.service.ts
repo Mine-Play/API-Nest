@@ -37,17 +37,7 @@ export class UsersService {
         const user = await this.userRepository.findOne({ where: [ { name: login }, { email: login }] });
         return user;
     }
-    async getById(id: string): Promise<User | undefined> {
-        const user = await this.userRepository.findOne({ where: { id: id } });
-        return user;
-    }
-
-    /**
-     * 
-     * @param id user id
-     * @returns Authorized user object
-     */
-    async getMe(id: string, select = null): Promise<User | undefined> {
+    async getById(id: string, select = null): Promise<User | undefined> {
         if(select){
             return await this.userRepository.findOne({ where: { id: id }, select: select });
         }

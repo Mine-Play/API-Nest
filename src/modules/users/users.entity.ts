@@ -10,6 +10,7 @@ import { Texture } from './textures/textures.types';
 import { UserParams } from './users.types';
 import { AuthProvider } from './auth/auth.provider.entity';
 import { Referal } from '../referals/referals.entity';
+import { Item } from '../items/items.entity';
 
 @Entity("users")
 export class User {
@@ -112,6 +113,9 @@ export class User {
 
     @OneToMany(() => NewsComment, (comment) => comment.author)
     comments: NewsComment[]
+
+    @OneToMany(() => Item, (item) => item.createdBy)
+    items: Item[]
 
     @OneToOne(type => Wallet, wallet => wallet.user)
     wallet: Wallet;

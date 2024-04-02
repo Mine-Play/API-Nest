@@ -4,15 +4,20 @@ import { Item } from './items.entity';
 import { ShopItem } from './shop/shop.entity';
 import { ItemPersonalizeModule } from './types/personalization/personalization.module';
 import { ShopItemModule } from './shop/shop.module';
+import { ItemsController } from './items.controller';
+import { ItemsService } from './items.service';
+import { SessionsService } from '../users/sessions/sessions.service';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-  controllers: [],
-  providers: [],
+  controllers: [ItemsController],
+  providers: [ItemsService],
   exports: [],
   imports: [
-    TypeOrmModule.forFeature([ Item, ShopItem ], 'minigames'),
+    TypeOrmModule.forFeature([ Item, ShopItem ]),
     ItemPersonalizeModule,
-    ShopItemModule
+    ShopItemModule,
+    UsersModule
   ],
 })
 export class ItemsModule {}

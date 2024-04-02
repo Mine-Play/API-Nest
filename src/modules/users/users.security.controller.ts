@@ -14,14 +14,14 @@ export class UsersSecurityController {
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Get("/passwordLastChange")
     async getPasswordLastChange(@Req() request, @Res() res: Response) {
-        const user = await this.userService.getMe(request.user.id, ['passwordReset_at']);
+        const user = await this.userService.getById(request.user.id, ['passwordReset_at']);
         res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: { unix: user.passwordReset_at, human: dateInterval(user.passwordReset_at) } });
     }
 
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Post("/changePassword")
     async changePassword(@Req() request, @Res() res: Response, @Body() dto: ChangePasswordDto) {
-        const user = await this.userService.getMe(request.user.id, ['id', 'password', 'passwordReset_at']);
+        const user = await this.userService.getById(request.user.id, ['id', 'password', 'passwordReset_at']);
         if (!user || !(await argon2.verify(user?.password, dto.password))) {
             throw new TwoFactorInvalidException();
         }

@@ -12,7 +12,7 @@ export class SessionsController {
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Get("/active")
     async getUserActiveSessions(@Req() request, @Res() res: Response) {
-        const user = await this.userService.getMe(request.user.id, ['id']);
+        const user = await this.userService.getById(request.user.id, ['id']);
         const sessions = await this.sessionsService.getByUser(user);
 
         for(let i = 0; i < sessions.length; i++){
@@ -28,7 +28,7 @@ export class SessionsController {
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Get("/kill/all")
     async killAllUserSessions(@Req() request, @Res() res: Response) {
-        const user = await this.userService.getMe(request.user.id, ['id']);
+        const user = await this.userService.getById(request.user.id, ['id']);
         const sessions = await this.sessionsService.getByUser(user); 
         console.log(sessions);
         await this.sessionsService.destroy(sessions)
