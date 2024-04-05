@@ -12,11 +12,10 @@ import { UsersModule } from '../users/users.module';
 @Module({
   controllers: [ItemsController],
   providers: [ItemsService],
-  exports: [],
+  exports: [ItemsService],
   imports: [
     TypeOrmModule.forFeature([ Item, ShopItem ]),
     ItemPersonalizeModule,
-    ShopItemModule,
     UsersModule
   ],
 })

@@ -6,6 +6,9 @@ export class ShopItem {
     @PrimaryColumn()
     id: number;
 
+    @Column({ type: "boolean", default: false })
+    isFree: boolean;
+
     @Column({ type: "integer", default: null })
     money: number;
 

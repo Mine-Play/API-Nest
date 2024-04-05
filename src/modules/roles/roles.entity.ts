@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
 import { User } from '../users/users.entity';
 
 
 @Entity("roles")
 export class Role {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: number;
 
     @Column({ type: "varchar" })
@@ -18,6 +18,9 @@ export class Role {
 
     @Column({ type: "text" })
     permissions: string;
+
+    @Column({ type: "boolean", default: false })
+    isSell: boolean;
 
     @OneToMany(type => User, user => user.role)
     users: User[];

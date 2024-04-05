@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard, EmailConfirmedGuard } from '../users/auth/auth.guard';
 import { Response } from 'express';
+import { AuthGuard, EmailConfirmedGuard } from '../users/auth/auth.guard';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UsersService } from '../users/users.service';
@@ -17,10 +17,10 @@ export class ItemsController {
 
     @UseGuards(AuthGuard, EmailConfirmedGuard)
     @Post('create')
-    async getProfile(@Req() request, @Body() dto: CreateItemDto) {
+    async getProfile(@Req() request, @Body() dto: CreateItemDto, @Res() res: Response) {
         const user = await this.usersService.getById(request.user.id, ['id', 'name']);
         const newItem = await this.itemsService.create(dto, user);
 
-        return newItem;
+        res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: newItem });
     }
 }

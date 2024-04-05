@@ -18,4 +18,8 @@ export class ItemsService {
         const item = await this.itemsRepository.create({ ...dto, createdBy: user });
         return await this.itemsRepository.save(item);
     }
+
+    async getById(id: number): Promise<Item> {
+        return await this.itemsRepository.findOne({ where: { id: id } });
+    }
 }

@@ -21,7 +21,7 @@ export class UsersController {
     async me(@Req() request, @Res() res: Response) {
         const user = await this.userService.getById(request.user.id, ['id', 'name', 'level', 'exp', 'avatar', 'skin', 'cloak', 'lastLogin', 'createdAt', 'role', 'banner', 'avatar', 'params']);
         const avatar = await this.texturesService.getUserAvatar(user);
-        const userSpecial = await Promise.all([this.walletService.getByUser(user, true), this.texturesService.getUserSkin(user), this.texturesService.getUserCloak(user), this.texturesService.getUserBanner(user), await this.rolesService.findByUser(user)]);
+        const userSpecial = await Promise.all([this.walletService.getByUser(user, true), this.texturesService.getUserSkin(user), this.texturesService.getUserCloak(user), this.texturesService.getUserBanner(user), await this.rolesService.getByUser(user)]);
         user.avatar = avatar;
         user.wallet = userSpecial[0];
         user.skin = userSpecial[1];

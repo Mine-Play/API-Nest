@@ -20,16 +20,20 @@ export class RolesService {
         }
         return role;
     }
-    async findById(id: number): Promise<Role | undefined> {
+    async getById(id: number): Promise<Role | undefined> {
         const role = await this.rolesRepository.findOne({ where: { id: id } });
         return role;
     }
 
-    async findByUser(user: User): Promise<Role | undefined> {
+    async getByUser(user: User): Promise<Role | undefined> {
         const role = await this.rolesRepository.findOne({ where: { users: user } });
         return role;
     }
-    
+    async getSellable(): Promise<Role[]> {
+        const roles = await this.rolesRepository.find({ where: { isSell: true } });
+        return roles;
+    }
+
     async create(dto: CreateRoleDto): Promise<Role> {
         const role = await this.rolesRepository.create(dto);
         return await this.rolesRepository.save(role);

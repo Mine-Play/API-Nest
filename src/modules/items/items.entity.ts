@@ -21,5 +21,5 @@ export class Item {
 
     shop: ShopItem;
 
-    info: ItemPersonalization;
+    special: ItemPersonalization;
 }

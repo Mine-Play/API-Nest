@@ -10,14 +10,23 @@ import { Item } from '../items.entity';
 export class ShopService {
     constructor(@InjectRepository(ShopItem) private shopRepository: Repository<ShopItem>) {}
 
-    async addItemToShop(dto: AddItemToShopDto, item: Item): Promise<ShopItem> {
+    async addToShop(dto: AddItemToShopDto, item: Item): Promise<ShopItem> {
         delete dto.id;
+        let isFree = false;
+        if(dto.money == undefined && dto.coins == undefined && dto.keys == undefined) {
+            isFree = true;
+        }
         const shopItem = this.shopRepository.create({
             ...dto,
-            id: item.id
+            id: item.id,
+            isFree
         });
 
         return await this.shopRepository.save(shopItem);
+    }
+
+    async removeFromShop(item: Item) {
+        return await this.shopRepository.delete({ id: item.id });
     }
 
     async getItemInfo(item: Item): Promise<ShopItem>{
