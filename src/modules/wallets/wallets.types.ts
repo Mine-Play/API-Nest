@@ -1,5 +1,7 @@
 export enum Bills {
-    "COINS", "MONEY", "KEYS"
+    "COINS", "REALCOINS", "GAMECOINS", 
+    "MONEY", 
+    "KEYS"
 }
 
 export enum ExchangeBills {

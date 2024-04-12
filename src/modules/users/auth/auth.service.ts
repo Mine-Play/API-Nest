@@ -2,7 +2,7 @@ import { BadRequestException } from '../../../exceptions/BadRequestException';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { UsersService } from '../users.service';
 import { SessionsService } from '../sessions/sessions.service';
-import { UnauthorizedException } from '../../../exceptions/UnauthorizedException';
+import { NotRegisteredException, UnauthorizedException } from '../../../exceptions/UnauthorizedException';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import * as useragent from 'useragent';
@@ -13,16 +13,23 @@ import { EmailHelper } from 'src/helpers/email.helper';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { GoogleProvider } from 'src/services/authProviders/google.provider';
+import { DiscordProvider } from 'src/services/authProviders/discord.provider';
+import { AuthProvider } from './auth.provider.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { NotFoundException } from 'src/exceptions/NotFoundException';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(AuthProvider) private authProviderRepository: Repository<AuthProvider>,
     private usersService: UsersService,
     private sessionsService: SessionsService,
     private jwtService: JwtService,
     private confirmationsService: VerifyService,
     private walletsService: WalletsService,
     private googleProvider: GoogleProvider,
+    private discordProvider: DiscordProvider,
     @InjectQueue('geoDetect') private geoDetectQueue: Queue
   ) {}
   async login(login, password) {
@@ -40,15 +47,42 @@ export class AuthService {
     switch(provider) {
       case "google":
         return this.googleProvider.getRedirectURL();
+      case "discord":
+        return this.discordProvider.getRedirectURL();
+      default:
+        throw new NotFoundException();
     }
   }
 
-  // async callback(provider: string, request): Promise<string> {
-  //   switch(provider) {
-  //     case "google":
-  //       return this.googleProvider.callback(request);
-  //   }
-  // }
+  async callback(provider: string, request) {
+    let callback;
+    switch(provider) {
+      case "google":
+        callback = await this.googleProvider.callback(request);
+        break;
+      case "discord":
+        callback = await this.discordProvider.callback(request);
+        break;
+      default:
+        throw new NotFoundException();
+    }
+
+    const user = await this.usersService.getByEmail(callback.email);
+
+	//Email not found
+    if(!user) {
+      throw new NotRegisteredException();
+    }
+
+	const providerInfo = this.authProviderRepository.findOne({ where: { providerId: callback.id, provider } });
+
+	if(!providerInfo) {
+		//Needs TOTP to continue(TODO)
+		// throw new NeedsTwoFactorException();
+	}
+
+	return user;
+  }
 
   /**
    * Register a user

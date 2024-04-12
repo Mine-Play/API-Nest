@@ -64,4 +64,8 @@ export class News {
 
     @OneToMany(() => NewsComment, (comment) => comment.new)
     comments: NewsComment[]
+
+    preview: any;
+
+    placement: string;
 }

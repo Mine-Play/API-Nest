@@ -13,16 +13,34 @@ export class GoogleProvider
     ];
 
 
-    getRedirectURL() {
-        return this.CLIENT.generateAuthUrl({
+    async getRedirectURL() {
+        return await this.CLIENT.generateAuthUrl({
             access_type: 'offline',
             scope: this.scopes,
             include_granted_scopes: true
           });
     }
 
+    /**
+     * Sample data
+     * 
+     *  data: {
+            id: '110259293601717232340',
+            email: 'winvertg@gmail.com',
+            verified_email: true,
+            name: 'old.',
+            given_name: 'old.',
+            picture: 'https://lh3.googleusercontent.com/a/ACg8ocIpnGx5IiRxZW1sQcczkU9d2l_o3wOp07xfEaBgNFnaCIxGVavN=s96-c',
+            locale: 'ru'
+        },
+     */
     async callback(request) {
         let { tokens } = await this.CLIENT.getToken(request.code);
         this.CLIENT.setCredentials(tokens);
+
+        const oauth2 = google.oauth2({ version: 'v2', auth: this.CLIENT });
+        const userInfo = await oauth2.userinfo.get();
+
+        return userInfo.data;
     }
 }

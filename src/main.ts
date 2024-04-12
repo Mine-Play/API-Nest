@@ -5,6 +5,7 @@ import { CommandFactory } from 'nest-commander';
 import { ErrorFilter } from './filters/error.filter';
 import { MyThrottleErrorFilter, ThrottleErrorFilter } from './filters/throttle.filter';
 import helmet from 'helmet';
+import { IncidentsService } from './modules/incidents/incidents.service';
 
 async function bootstrap() {
   const port = process.env.PORT || 8000;
@@ -13,7 +14,8 @@ async function bootstrap() {
   });
   await CommandFactory.run(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new ThrottleErrorFilter(), new MyThrottleErrorFilter());
+  const incidents = app.get<IncidentsService>(IncidentsService);
+  app.useGlobalFilters(new ThrottleErrorFilter(), new MyThrottleErrorFilter(), new ErrorFilter(incidents));
   app.use(helmet());
   app.enableCors();
   console.info('Server started on port ' + port + ' 🔥');

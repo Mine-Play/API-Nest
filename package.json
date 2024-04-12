@@ -42,6 +42,7 @@
     "canvas": "^2.11.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "discord-oauth2": "^2.12.1",
     "googleapis": "^133.0.0",
     "handlebars": "^4.7.8",
     "helmet": "^7.1.0",
@@ -58,6 +59,7 @@
     "reflect-metadata": "^0.1.13",
     "robokassa-node": "^1.1.2",
     "rxjs": "^7.8.1",
+    "speakeasy": "^2.0.0",
     "typeorm": "^0.3.20",
     "useragent": "^2.3.0"
   },

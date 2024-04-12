@@ -10,7 +10,8 @@ import { Texture } from './textures/textures.types';
 import { UserParams } from './users.types';
 import { AuthProvider } from './auth/auth.provider.entity';
 import { Referal } from '../referals/referals.entity';
-import { Item } from '../items/items.entity';
+import { Order } from '../wallets/orders/orders.entity';
+import { OTP } from './auth/OTP/otp.entity';
 
 @Entity("users")
 export class User {
@@ -20,11 +21,11 @@ export class User {
     @Column({ type: "varchar", unique: true })
     name: string;
 
-    @Column({ type: "varchar", unique: true })
+    @Column({ type: "varchar", unique: true, select: false })
     email: string;
 
     
-    @Column({ type: "varchar" })
+    @Column({ type: "varchar", select: false })
     password: string;
 
 
@@ -33,16 +34,16 @@ export class User {
      * User has a experience and level
      * Level is recalculating when user's exp changes
      */
-    @Column({ type: "integer", default: 1 })
+    @Column({ type: "integer", default: 1, select: false })
     level: number;
 
-    @Column({ type: "integer", default: 0 })
+    @Column({ type: "integer", default: 0, select: false })
     exp: number;
 
     /**
      * Check if user confirmed his email
      */
-    @Column({ type: "boolean", default: false })
+    @Column({ type: "boolean", default: false, select: false })
     isEmailConfirmed: boolean;
 
     /**
@@ -57,7 +58,7 @@ export class User {
         this.passwordReset_at = Math.floor(Date.now() / 1000);
     }
 
-    @Column({ type: "timestamp", nullable: true })
+    @Column({ type: "timestamp", nullable: true, select: false })
     lastLogin: Date;
 
     /**
@@ -70,7 +71,7 @@ export class User {
      *       3 - choosed skin from MP library
      */
 
-    @Column({ type: "integer", default: 0 })
+    @Column({ type: "integer", default: 0, select: false })
     skin: number | Texture;
 
     /**
@@ -79,7 +80,7 @@ export class User {
      *        2 - uploaded HD cloak
      *        3 - choosed cloak from MP library(IN DEV)
      */
-    @Column({ type: "integer", default: 0 })
+    @Column({ type: "integer", default: 0, select: false })
     cloak: number | Texture | boolean;
 
     /**
@@ -88,7 +89,7 @@ export class User {
      *         2 - uploaded banner
      *         3 - uploaded ANIMATED banner (INDEV)
      */
-    @Column({ type: "integer", default: 0 })
+    @Column({ type: "integer", default: 0, select: false })
     banner: number | Texture | boolean | string;
 
     /**
@@ -96,7 +97,7 @@ export class User {
      *         1 - uploaded avatar
      *         2 - uploaded ANIMATED avatar (INDEV)
      */
-    @Column({ type: "integer", default: 0 })
+    @Column({ type: "integer", default: 0, select: false })
     avatar: number | Texture;
 
     @OneToMany(type => Session, session => session.user)
@@ -114,8 +115,12 @@ export class User {
     @OneToMany(() => NewsComment, (comment) => comment.author)
     comments: NewsComment[]
 
-    @OneToMany(() => Item, (item) => item.createdBy)
-    items: Item[]
+
+    @OneToMany(() => Order, (order) => order.user)
+    orders: Order[]
+
+    @OneToMany(() => OTP, (otp) => otp.user)
+    totp: OTP[]
 
     @OneToOne(type => Wallet, wallet => wallet.user)
     wallet: Wallet;
@@ -131,7 +136,7 @@ export class User {
     @OneToOne(type => Referal, referal => referal.user)
     referal: Referal;
 
-    @Column({ type: 'bigint', readonly: true, default: 0 })
+    @Column({ type: 'bigint', readonly: true, default: 0, select: false })
     createdAt: number;
 
     @BeforeInsert()
@@ -139,6 +144,6 @@ export class User {
         this.createdAt = Math.floor(Date.now() / 1000);
     }
 
-    @Column({ type: "simple-json", default: { banner: "#FFFFFF" } })
+    @Column({ type: "simple-json", default: { banner: "#FFFFFF" }, select: false })
     params: UserParams
 }

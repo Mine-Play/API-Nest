@@ -7,15 +7,18 @@ import { NewsController } from './news.controller';
 import { NewsService } from './news.service';
 import { UsersModule } from '../users/users.module';
 import { NewsCategoriesService } from './categories/news.categories.service';
+import { StorageService } from 'src/services/storage.service';
+import { NestjsFormDataModule } from 'nestjs-form-data';
 
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ News, NewsCategory, NewsComment ]),
-    UsersModule
+    UsersModule,
+    NestjsFormDataModule
   ],
-  providers: [NewsService, NewsCategoriesService],
+  providers: [NewsService, NewsCategoriesService, StorageService],
   controllers: [NewsController],
-  exports: [],
+  exports: [NewsService],
 })
 export class NewsModule {}

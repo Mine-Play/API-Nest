@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, UpdateDateColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, UpdateDateColumn, CreateDateColumn, BeforeInsert, BeforeUpdate, OneToMany } from 'typeorm';
 import { User } from '../users.entity';
-import { Type } from 'class-transformer';
+import { OTP } from '../auth/OTP/otp.entity';
 
 @Entity("sessions")
 export class Session {
@@ -33,6 +33,9 @@ export class Session {
     @ManyToOne(() => User, (user) => user.sessions)
     user: User
 
+    @OneToMany(() => OTP, (otp) => otp.session)
+    totp: OTP[]
+    
     @Column({ type: 'bigint', readonly: true, default: 0 })
     createdAt: number;
 

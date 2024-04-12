@@ -132,3 +132,9 @@ export class TwoFactorInvalidException extends HttpException {
     super({ status: 4015, message: "Two factor authentication failed." }, HttpStatus.FORBIDDEN);
   }
 }
+
+export class NotRegisteredException extends HttpException {
+  constructor() {
+    super({ status: 4016, message: "User with current email not found." }, HttpStatus.FORBIDDEN);
+  }
+}

@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsUUID } from "class-validator";
+import { HasMimeType, IsFile } from "nestjs-form-data";
 
 export class CreateNewDto {
     @IsNotEmpty()
@@ -11,9 +12,12 @@ export class CreateNewDto {
     readonly fullStory: string;
 
     @IsNotEmpty()
-    @IsNumber()
     readonly time: number;
     
     @IsUUID()
     readonly category: string;
+
+    @IsFile()
+    @HasMimeType(['image/jpeg', 'image/png'])
+    readonly preview: any;
 }

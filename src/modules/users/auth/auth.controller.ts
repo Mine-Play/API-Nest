@@ -1,10 +1,10 @@
-import { Body, Controller, Post, HttpStatus, UseGuards, Get, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, HttpStatus, UseGuards, Get, Req, Res, Query, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { Throttle } from '@nestjs/throttler';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { ReferalsService } from 'src/modules/referals/referals.service';
 import { BadRequestException } from 'src/exceptions/BadRequestException';
 
@@ -20,15 +20,17 @@ export class AuthController {
     return this.authService.respondWithToken(user, request);
   }
 
-  @Get('login/google')
-  async getGoogleURL() {
-    return this.authService.getRedirectURL("google");
+  @Get('login/:provider')
+  async getOauthURL(@Res() res: Response, @Param('provider') provider) {
+    const redirectUrl = await this.authService.getRedirectURL(provider);
+    res.status(HttpStatus.OK).json({ status: HttpStatus.OK, data: { redirectUrl } });
   }
 
-  // @Get('login/google/callback')
-  // async googleCallback(@Req() request: Request) {
-  //   return this.authService.callback("google", request);
-  // }
+  @Get('login/:provider/callback')
+  async getOauthCallback(@Query() query, @Param('provider') provider, @Req() request) {
+    const callback = await this.authService.callback(provider, query);
+    return this.authService.respondWithToken(callback, request);
+  }
   
   @Throttle({ default: { limit: 3, ttl: 15000 } })
   @Post('register')

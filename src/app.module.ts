@@ -24,9 +24,11 @@ import { ServersModule } from './modules/servers/servers.module';
 import { NewsModule } from './modules/news/news.module';
 import { AppController } from './app.controller';
 import { ReferalsModule } from './modules/referals/referals.module';
-import { ItemsModule } from './modules/items/items.module';
-import { ItemPersonalizeModule } from './modules/items/types/personalization/personalization.module';
-import { ShopItemModule } from './modules/items/shop/shop.module';
+import { TransactionsModule } from './modules/wallets/transactions/transactions.module';
+import { OrdersModule } from './modules/wallets/orders/orders.module';
+import { LauncherModule } from './modules/services/launcher/launcher.module';
+import { IncidentsModule } from './modules/incidents/incidents.module';
+import { OTPModule } from './modules/users/auth/OTP/otp.module';
 
 const TypeORMConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -97,14 +99,16 @@ const TypeORMConfig: TypeOrmModuleOptions = {
     UsersModule,
     RolesModule,
     WalletsModule,
+    TransactionsModule,
     UiModule,
     VerifyModule,
     ServersModule,
     NewsModule,
     ReferalsModule,
-    ItemsModule,
-    ItemPersonalizeModule,
-    ShopItemModule
+    OrdersModule,
+    LauncherModule,
+    IncidentsModule,
+    OTPModule
   ],
   controllers: [AppController],
   providers: [

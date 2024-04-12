@@ -13,6 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthProvider } from './auth.provider.entity';
 import { GoogleProvider } from 'src/services/authProviders/google.provider';
 import { ReferalsModule } from 'src/modules/referals/referals.module';
+import { DiscordProvider } from 'src/services/authProviders/discord.provider';
 
 
 @Module({
@@ -36,7 +37,7 @@ import { ReferalsModule } from 'src/modules/referals/referals.module';
       name: 'geoDetect',
   }),
   ],
-  providers: [AuthService, GoogleProvider],
+  providers: [AuthService, GoogleProvider, DiscordProvider],
   controllers: [AuthController, AuthConfirmController],
   exports: [AuthService],
 })
