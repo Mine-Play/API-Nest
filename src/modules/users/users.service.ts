@@ -33,8 +33,8 @@ export class UsersService {
         return user;
     }
 
-    async getByLogin(login: string): Promise<User | undefined> {
-        const user = await this.userRepository.findOne({ where: [ { name: login }, { email: login }] });
+    async getByLogin(login: string, select = null): Promise<User | undefined> {
+        const user = await this.userRepository.findOne({ where: [ { name: login }, { email: login }], select: select });
         return user;
     }
     async getById(id: string, select = null): Promise<User | undefined> {

@@ -33,7 +33,7 @@ export class AuthService {
     @InjectQueue('geoDetect') private geoDetectQueue: Queue
   ) {}
   async login(login, password) {
-    const user = await this.usersService.getByLogin(login);
+    const user = await this.usersService.getByLogin(login, ['id', 'name', 'password', 'isEmailConfirmed', 'email']);
     if (!user || !(await argon2.verify(user?.password, password))) {
       throw new UnauthorizedException();
     }
@@ -165,15 +165,27 @@ export class AuthService {
       });
       this.geoDetectQueue.add("getLocation", { session, ip });
     }
-    const payload = { id: user.id, session: session.id };
-    return {
-      status: HttpStatus.OK,
-      name: user.name,
-      tokenType: 'Bearer',
-      token: await this.jwtService.signAsync(payload),
-      session: session.id,
-      isEmailConfirmed: user.isEmailConfirmed,
-      obusficatedEmail: EmailHelper.obusficate(user.email)
-    };
+    const payload = { id: user.id, session: session.id }; 
+
+    if(user.isEmailConfirmed) {
+      return {
+        status: HttpStatus.OK,
+        name: user.name,
+        tokenType: 'Bearer',
+        token: await this.jwtService.signAsync(payload),
+        session: session.id,
+        isEmailConfirmed: true
+      };
+    } else {
+      return {
+        status: HttpStatus.OK,
+        name: user.name,
+        tokenType: 'Bearer',
+        token: await this.jwtService.signAsync(payload),
+        session: session.id,
+        isEmailConfirmed: false,
+        obusficatedEmail: EmailHelper.obusficate(user.email)
+      };
+    }
   }
 }

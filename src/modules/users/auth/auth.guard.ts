@@ -63,7 +63,7 @@ export class EmailConfirmedGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const user = await this.usersService.getById(request.user.id);
+    const user = await this.usersService.getById(request.user.id, ['isEmailConfirmed']);
     if(!user.isEmailConfirmed){
       throw new EmailNotConfirmedException();
     }

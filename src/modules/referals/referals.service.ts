@@ -20,9 +20,10 @@ export class ReferalsService {
 
     async getByUser(user: User): Promise<Referal> {
         const referal = await this.referalsRepository.findOne({ where: { user } });
-        referal.level = await this.referalsLevelsService.getByReferal(referal);
-
-        return referal;
+        if(referal) {
+            referal.level = await this.referalsLevelsService.getByReferal(referal);
+            return referal;
+        }
     }
     
     async getByName(name: string, select = null): Promise<Referal> {
